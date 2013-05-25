@@ -7,9 +7,19 @@ import groovy.transform.Canonical
 class Table {
     String tableName
     List<Column> pk = [], columns = []
+    List<Index> indexes = []
     List<String> triggers = []
 
-    def createSql() {
+
+    def createTableSql() {
         TemplateUtils.render( './templates/oracle/table.tmpl.sql', this.properties )
+    }
+
+    def createIndexesSql() {
+        indexes.collect { index -> index.createIndexSql() }.join( '\n' )
+    }
+
+    def createSequenceSql() {
+        new Sequence( table: this ).createSequenceSql()
     }
 }

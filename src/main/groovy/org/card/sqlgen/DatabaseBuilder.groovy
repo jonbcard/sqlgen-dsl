@@ -11,14 +11,19 @@ class DatabaseBuilder {
 
         Table table
 
+        // DSL-keyword shortcuts
+        boolean unique = true
+
         Table make( String name, Closure tableDef ) {
             table = new Table()
+            table.tableName = name
+
             runClosure tableDef
 
             return table
         }
 
-        def pk( String name, String type, String modifiers="NOT NULL" ) {
+        def pk( String name, String type="NUMBER", String modifiers="NOT NULL" ) {
             table.pk << new Column( name: name, type: type, modifiers: modifiers )
         }
 
@@ -26,8 +31,8 @@ class DatabaseBuilder {
             table.columns << new Column( name: name, type: type, modifiers: modifiers )
         }
 
-        def index( String ... columns ) {
-            table.columns << new Index( columns: columns )
+        def index( boolean unique=false, String ... columns ) {
+            table.indexes << new Index( columns: columns, unique: unique, table: table )
         }
 
         def trigger( String name ) {

@@ -2,6 +2,6 @@ CREATE TABLE ${tableName}
 (<% pk.each() { col -> %>
 , ${col.name} ${col.type} ${col.modifiers}<% } %><% columns.each() { col -> %>
 , ${col.name} ${col.type} ${col.modifiers}<% } %>
-, CONSTRAINT ${tableName}_PK PRIMARY KEY (<% pk.each() { col -> %>, ${col.name}<% } %>)
+, CONSTRAINT PK_${tableName} PRIMARY KEY (<%= pk['name'].join(', ') %>)
   ENABLE
 );
